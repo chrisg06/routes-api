@@ -26,6 +26,6 @@ import { RoutesModule } from './routes/routes.module';
   RoutesModule,
 ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [],
 })
 export class AppModule {}
