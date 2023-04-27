@@ -22,5 +22,8 @@ export class RoutesService {
         return { count, routes };
       }
 
+    async findOne(id: number): Promise<Route> {
+        return await this.routesRepository.findOneBy({id: id});
+    }
 
 }

@@ -27,4 +27,9 @@ export class RoutesController {
         return { count, routes: routes };
       }
 
+    @Get(':id')
+    async findOne(@Param('id') id: number): Promise<Route> {
+        return await this.routesService.findOne(id);
+    }
+
 }
