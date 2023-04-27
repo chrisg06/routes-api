@@ -24,7 +24,7 @@ export class RoutesController {
     @Get()
     async findAll(@Query('dept') dept?: string, @Query('dest') dest?: string) {
         const { count, routes } = await this.routesService.findAll(dept, dest);
-        return { count, data: routes };
+        return { count, routes: routes };
       }
 
 }

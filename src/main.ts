@@ -6,9 +6,10 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.enableCors({
-    origin: [/vatpac\.org$/, /localhost(:\d+)?$/]
+    origin: [/vatpac\.org$/, /localhost(:\d+)?$/],
+    credentials: true,
   });
-  
+
   const config = new DocumentBuilder()
   .setTitle('Routes API')
   .setDescription('API to get routes from the ERSA FPR')
