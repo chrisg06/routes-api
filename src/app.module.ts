@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { Route } from './routes/routes.entity';
 import { RoutesModule } from './routes/routes.module';
+import { WeatherModule } from './weather/weather.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { RoutesModule } from './routes/routes.module';
   }),
   ConfigModule.forRoot({ isGlobal: true }),
   RoutesModule,
+  WeatherModule,
 ],
   controllers: [AppController],
   providers: [],
