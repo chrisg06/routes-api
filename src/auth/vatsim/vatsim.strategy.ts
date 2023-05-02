@@ -40,7 +40,7 @@ export class VatsimStrategy extends PassportStrategy(Strategy, 'vatsim') {
         user = await this.userService.findByCid(response.data.data.cid);
     } catch (err) {
         if (err instanceof NotFoundException) {
-            console.log('replace with create user');
+            user = await this.userService.createUser(response.data);
         } else {
             throw err;
         }

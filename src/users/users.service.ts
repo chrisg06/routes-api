@@ -40,4 +40,17 @@ export class UsersService {
     return user;
   }
 
+  async createUser(pUser: any): Promise<User> {
+    const u=pUser.data;
+    const cid = Number(u.cid);
+
+    const user = new User()
+    user.cid = cid;
+    user.firstName = u.personal.name_first;
+    user.lastName = u.personal.name_last;
+
+    const savedUser = await this.usersRepository.save(user);
+    
+    return savedUser;
+  }
 }
