@@ -23,6 +23,7 @@ export class AuthService {
 
         return {
             token: this.jwtService.sign(payload),
+            expiresIn: 60 * 60 * 1000, // 1 hour
             refreshToken,
         };
     }
@@ -63,6 +64,7 @@ export class AuthService {
             return {
                 user,
                 token: this.jwtService.sign({ sub: user.id }),
+                expiresIn: 60 * 60 * 1000, // 1 hour
                 newRefreshToken: creds.refresh_token,
             };
         } catch (err) {
