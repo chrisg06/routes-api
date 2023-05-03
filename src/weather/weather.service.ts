@@ -20,22 +20,6 @@ export class WeatherService {
     });
   }
 
-  async getFileContentsHttp(url: string): Promise<string> {
-    return new Promise((resolve, reject) => {
-      http.get(url, (res) => {
-        let data = '';
-        res.on('data', (chunk) => {
-          data += chunk;
-        });
-        res.on('end', () => {
-          resolve(data);
-        });
-      }).on('error', (err) => {
-        reject(err);
-      });
-    });
-  }
-
   createJson(fileContents: string, search: string, type: string) {
     try {
       const lines = fileContents.split("\n");

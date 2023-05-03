@@ -27,8 +27,8 @@ export class WeatherController {
   @Get('tafs')
   async getTafs(@Res() res: Response, @Query('search') search: string) {
     try {
-      const fileUrl = 'http://localhost:8080/tafs.txt';
-      const fileContents = await this.weatherService.getFileContentsHttp(
+      const fileUrl = 'https://wx.vatpac.org/tafs.txt';
+      const fileContents = await this.weatherService.getFileContents(
         fileUrl,
       );
       const json = this.weatherService.createJson(fileContents, search, 'taf');
