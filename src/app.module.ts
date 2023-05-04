@@ -6,6 +6,7 @@ import { ConfigService } from '@nestjs/config';
 import { Route } from './routes/routes.entity';
 import { RoutesModule } from './routes/routes.module';
 import { WeatherModule } from './weather/weather.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { WeatherModule } from './weather/weather.module';
   ConfigModule.forRoot({ isGlobal: true }),
   RoutesModule,
   WeatherModule,
+  AuthModule,
 ],
   controllers: [AppController],
   providers: [],
