@@ -11,21 +11,21 @@ import { VatsimStrategy } from './vatsim/vatsim.strategy';
 import { JwtStrategy } from './jwt/jwt.strategy';
 
 @Module({
-    imports: [
-        UsersModule,
-        HttpModule,
-        PassportModule,
-        JwtModule.registerAsync({
-            useFactory: async (configService: ConfigService) => {
-                return {
-                    secret: configService.get<string>('JWT_SECRET'),
-                    signOptions: { expiresIn: '1h' },
-                };
-            },
-            inject: [ConfigService],
-        }),
-    ],
-    providers: [AuthService, VatsimStrategy, JwtStrategy],
-    controllers: [AuthController],
+  imports: [
+    HttpModule,
+    PassportModule,
+    UsersModule,
+    JwtModule.registerAsync({
+      useFactory: async (configService: ConfigService) => {
+        return {
+          secret: configService.get<string>('JWT_SECRET'),
+          signOptions: { expiresIn: '30m' },
+        };
+      },
+      inject: [ConfigService],
+    }),
+  ],
+  providers: [AuthService, VatsimStrategy, JwtStrategy],
+  controllers: [AuthController],
 })
 export class AuthModule {}
