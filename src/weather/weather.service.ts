@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import * as https from 'https';
 import * as http from 'http';
+import { json } from 'stream/consumers';
 
 @Injectable()
 export class WeatherService {
@@ -43,4 +44,45 @@ export class WeatherService {
       return null;
     }
   }
+
+  createIcaoJson(MetarFileContents: string, TafFileContents: string, icao: string) {
+    try {
+      const Metarlines = MetarFileContents.split("\n");
+      const TafLines = TafFileContents.split("\n");
+      const searchRegex = new RegExp(icao, 'i');
+  
+      // Find the Metar object that matches the ICAO code
+      const metarObj = Metarlines.reduce((acc, line) => {
+        const value = line;
+        if (searchRegex.test(value)) {
+          acc = value;
+        }
+        return acc;
+      }, 'No Metar Available');
+  
+      // Find the Taf object that matches the ICAO code
+      const tafObj = TafLines.reduce((acc, line) => {
+        const value = line;
+        if (searchRegex.test(value)) {
+          acc = value;
+        }
+        return acc;
+      }, 'No TAF Available');
+  
+      // Create the final JSON object
+      const jsonObj = {
+        icao: icao.toUpperCase(),
+        weather: {
+          metar: metarObj,
+          taf: tafObj
+        }
+      };
+  
+      return JSON.stringify(jsonObj);
+    } catch (err) {
+      console.log(err);
+      return null;
+    }
+  }
+  
 }
