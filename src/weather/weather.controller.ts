@@ -1,16 +1,21 @@
 import { Controller, Get, Res, Query, Param } from '@nestjs/common';
 import { Response } from 'express';
 import { WeatherService } from './weather.service';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('weather')
 export class WeatherController {
-  constructor(private readonly weatherService: WeatherService) {}
+  constructor(
+    private readonly weatherService: WeatherService,
+    private readonly configService: ConfigService,
+    ) {}
 
   @Get(':icao')
   async GetIcaoWeather(@Param('icao') icao: string, @Res() res: Response) {
     try {
-      const MetarFileUrl = 'https://wx.vatpac.org/metars.txt';
-      const TafFileUrl = 'https://wx.vatpac.org/tafs.txt';
+      const baseUrl = this.configService.get('WEATHER_BASE_URL');
+      const MetarFileUrl = `${baseUrl}/metars.txt`;
+      const TafFileUrl = `${baseUrl}/tafs.txt`;
       const MetarFileContents = await this.weatherService.getFileContents(MetarFileUrl);
       const TafFileContents = await this.weatherService.getFileContents(TafFileUrl);
       const json = this.weatherService.createIcaoJson(MetarFileContents, TafFileContents, icao);
