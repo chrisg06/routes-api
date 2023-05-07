@@ -49,21 +49,29 @@ export class AuthController {
     return { ...req.user, token, expiresIn };
   }
 
+  /**
+   * Call this route to attempt silent authentication.
+   * If a refresh token cookie is present and valid, the
+   * user and an access token will be returned. Otherwise,
+   * this route will return a 401 Unauthorized
+   */
   @Get('silent')
   async getUserFromRefreshToken(
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
   ) {
+    // Try to get cookie from client
     const cookieName = this.configService.get<string>('COOKIE_NAME');
     const refreshToken = req.signedCookies[cookieName];
 
-    if (refreshToken === undefined) {
-      throw new UnauthorizedException();
-    }
+    // If no cookie present, return 401
+    if (refreshToken === undefined) throw new UnauthorizedException();
 
+    // Exchange refreshToken for VATSIM details
     const { user, token, expiresIn, newRefreshToken } =
       await this.authService.refresh(refreshToken);
 
+    // Set new refresh token
     res.cookie(cookieName, newRefreshToken, {
       httpOnly: true,
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
@@ -75,6 +83,9 @@ export class AuthController {
     return { user, token, expiresIn };
   }
 
+  /**
+   * Clear refresh token
+   */
   @Get('logout')
   async clearRefreshToken(@Res({ passthrough: true }) res: Response) {
     const cookieName = this.configService.get<string>('COOKIE_NAME');
