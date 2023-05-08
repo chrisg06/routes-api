@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Route } from './routes.entity';
+import { CreateRouteDto } from './dto/route.dto';
 
 @Injectable()
 export class RoutesService {
@@ -26,4 +27,14 @@ export class RoutesService {
         return await this.routesRepository.findOneBy({id: id});
     }
 
+    async createRoute(route: CreateRouteDto): Promise<Route> {
+      const newRoute = new Route();
+      newRoute.dept = route.dept;
+      newRoute.dest = route.dest;
+      newRoute.acft = route.acft;
+      newRoute.route = route.route;
+      newRoute.notes = route.notes;
+      return await this.routesRepository.save(newRoute);
+  }
+  
 }
