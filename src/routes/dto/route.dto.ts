@@ -6,3 +6,9 @@ export class CreateRouteDto {
     readonly notes: string;
 
 }
+
+export class EditRouteDto {
+    readonly acft?: string;
+    readonly route?: string;
+    readonly notes?: string;
+}
