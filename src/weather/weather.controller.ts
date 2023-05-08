@@ -30,7 +30,7 @@ export class WeatherController {
   @Get('metars')
   async getMetars(@Res() res: Response, @Query('search') search: string) {
     try {
-      const fileUrl = 'https://wx.vatpac.org/metars.txt';
+      const fileUrl = `${this.configService.get('WEATHER_BASE_URL')}/metars.txt`;
       const fileContents = await this.weatherService.getFileContents(fileUrl);
       const json = this.weatherService.createJson(
         fileContents,
@@ -48,7 +48,7 @@ export class WeatherController {
   @Get('tafs')
   async getTafs(@Res() res: Response, @Query('search') search: string) {
     try {
-      const fileUrl = 'https://wx.vatpac.org/tafs.txt';
+      const fileUrl = `${this.configService.get('WEATHER_BASE_URL')}/tafs.txt`;
       const fileContents = await this.weatherService.getFileContents(
         fileUrl,
       );
