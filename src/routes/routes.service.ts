@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Route } from './routes.entity';
-import { CreateRouteDto } from './dto/route.dto';
+import { CreateRouteDto, EditRouteDto } from './dto/route.dto';
 
 @Injectable()
 export class RoutesService {
@@ -37,4 +37,12 @@ export class RoutesService {
       return await this.routesRepository.save(newRoute);
   }
   
+  async updateRoute(route: Route, routeData: EditRouteDto): Promise<Route> {
+    Object.assign(route, routeData)
+    return await this.routesRepository.save(route);
+  }
+
+  async deleteRoute(route: Route): Promise<Route> {
+    return await this.routesRepository.remove(route);
+  }
 }
