@@ -103,7 +103,7 @@ export class WeatherService {
       const cavokMatch = metarObj.match(/\bCAVOK\b/);
 
       if (cavokMatch) {
-        wx = 'CAVOK';
+        wx = ['CAVOK'];
       } else {
         const wxMatch = metarObj.match(
           /(?:\s|\b)((?:\+|-|VC)?(?:SH|TS|FZ)?(?:DZ|RA|SN|GR|GS|UP|PL|SG|IC|BR|FG|FU|VA|DU|SA|HZ|PY|PO|SQ|FC|SS|DS))(?=\s|\b)/g,
