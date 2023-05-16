@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
+import * as bodyParser from 'body-parser';
 import * as cookieparser from 'cookie-parser';
 
 
@@ -13,6 +14,9 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   const cookieSecret = configService.get('COOKIE_SECRET');
   app.use(cookieparser(cookieSecret))
+
+  app.use(bodyParser.json({ limit: '50mb'}));
+  app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
   app.enableCors({
     origin: [/vatpac\.org$/, /localhost(:\d+)?$/],

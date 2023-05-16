@@ -7,6 +7,11 @@ export class CreateRouteDto {
 
 }
 
+export class UploadRoutesDto {
+    readonly valid: string;
+    readonly data: CreateRouteDto[];
+}
+
 export class EditRouteDto {
     readonly acft?: string;
     readonly route?: string;
