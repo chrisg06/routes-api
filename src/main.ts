@@ -4,25 +4,39 @@ import { ConfigService } from '@nestjs/config';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
+import * as helmet from 'helmet';
 import * as bodyParser from 'body-parser';
-import * as cookieparser from 'cookie-parser';
+import * as cookieParser from 'cookie-parser';
+import * as Sentry from '@sentry/node';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  // Register for cookies
   const configService = app.get(ConfigService);
   const cookieSecret = configService.get('COOKIE_SECRET');
-  app.use(cookieparser(cookieSecret));
+  app.use(cookieParser(cookieSecret));
 
+  // Increase body size limit
   app.use(bodyParser.json({ limit: '50mb' }));
   app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
+  // Register Sentry error tracking
+  Sentry.init({
+    dsn: configService.get('SENTRY_DSN'),
+  });
+  
+  // Enable CORS
   app.enableCors({
-    origin: [/vatpac\.org$/, /localhost(:\d+)?$/],
+    origin: [/chrisgardiner\.org$/, /localhost(:\d+)?$/],
     credentials: true,
   });
 
   app.useGlobalPipes(new ValidationPipe());
+
+  // Use helmet
+  /* @ts-ignore */
+  app.use(helmet());
 
   const config = new DocumentBuilder()
     .setTitle('Routes API')
