@@ -39,6 +39,11 @@ export class RoutesController {
     return await this.routesService.createRoute(route);
   }
 
+  @Post('data')
+  async postData(@Body() data: any): Promise<any> {
+    return await this.routesService.postData(data);
+  }
+
   @Patch(':id')
   async editRoute(
     @Param('id') id: number,
