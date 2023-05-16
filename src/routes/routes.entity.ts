@@ -2,21 +2,21 @@ import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Route {
-    @PrimaryGeneratedColumn()
-    id: number;
-    
-    @Column()
-    dept: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    dest: string;
+  @Column()
+  dept: string;
 
-    @Column()
-    acft: string;
+  @Column()
+  dest: string;
 
-    @Column()
-    route: string;
+  @Column()
+  acft: string;
 
-    @Column()
-    notes: string;
+  @Column()
+  route: string;
+
+  @Column()
+  notes: string;
 }

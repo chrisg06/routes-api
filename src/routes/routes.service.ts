@@ -6,53 +6,55 @@ import { CreateRouteDto, EditRouteDto, UploadRoutesDto } from './dto/route.dto';
 
 @Injectable()
 export class RoutesService {
-    constructor(
-        @InjectRepository(Route)
-        private routesRepository: Repository<Route>,
-        @InjectEntityManager()
-        private entityManager: EntityManager
-    ) {}
+  constructor(
+    @InjectRepository(Route)
+    private routesRepository: Repository<Route>,
+    @InjectEntityManager()
+    private entityManager: EntityManager,
+  ) {}
 
-    async findAll(dept?: string, dest?: string): Promise<{ count: number, routes: Route[] }> {
-        const queryBuilder = this.routesRepository.createQueryBuilder('route');
-        if (dept) {
-          queryBuilder.where('route.dept = :dept', { dept });
-        }
-        if (dest) {
-          queryBuilder.andWhere('route.dest = :dest', { dest });
-        }
-        const [routes, count] = await queryBuilder.getManyAndCount();
-        return { count, routes };
-      }
-
-    async findOne(id: number): Promise<Route> {
-        return await this.routesRepository.findOneBy({id: id});
+  async findAll(
+    dept?: string,
+    dest?: string,
+  ): Promise<{ count: number; routes: Route[] }> {
+    const queryBuilder = this.routesRepository.createQueryBuilder('route');
+    if (dept) {
+      queryBuilder.where('route.dept = :dept', { dept });
     }
+    if (dest) {
+      queryBuilder.andWhere('route.dest = :dest', { dest });
+    }
+    const [routes, count] = await queryBuilder.getManyAndCount();
+    return { count, routes };
+  }
 
-    async createRoute(route: CreateRouteDto): Promise<Route> {
-      const newRoute = new Route();
-      newRoute.dept = route.dept;
-      newRoute.dest = route.dest;
-      newRoute.acft = route.acft;
-      newRoute.route = route.route;
-      newRoute.notes = route.notes;
-      return await this.routesRepository.save(newRoute);
+  async findOne(id: number): Promise<Route> {
+    return await this.routesRepository.findOneBy({ id: id });
+  }
+
+  async createRoute(route: CreateRouteDto): Promise<Route> {
+    const newRoute = new Route();
+    newRoute.dept = route.dept;
+    newRoute.dest = route.dest;
+    newRoute.acft = route.acft;
+    newRoute.route = route.route;
+    newRoute.notes = route.notes;
+    return await this.routesRepository.save(newRoute);
   }
 
   async postData(data: UploadRoutesDto): Promise<any> {
     // purge all old data
     await this.entityManager
-    .createQueryBuilder()
-    .delete()
-    .from('route')
-    .execute();
+      .createQueryBuilder()
+      .delete()
+      .from('route')
+      .execute();
 
     // reset auto increment
-    await this.entityManager.query('ALTER TABLE route AUTO_INCREMENT = 1;'
-    );
+    await this.entityManager.query('ALTER TABLE route AUTO_INCREMENT = 1;');
 
     // insert new data
-    data.data.forEach(async e => {
+    data.data.forEach(async (e) => {
       const newRoute = new Route();
       newRoute.dept = e.dept;
       newRoute.dest = e.dest;
@@ -63,9 +65,9 @@ export class RoutesService {
     });
     return { message: 'Data uploaded successfully' };
   }
-  
+
   async updateRoute(route: Route, routeData: EditRouteDto): Promise<Route> {
-    Object.assign(route, routeData)
+    Object.assign(route, routeData);
     return await this.routesRepository.save(route);
   }
 

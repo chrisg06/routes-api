@@ -10,7 +10,7 @@ export class WeatherController {
   constructor(
     private readonly weatherService: WeatherService,
     private readonly configService: ConfigService,
-    ) {}
+  ) {}
 
   @Get(':icao')
   async GetIcaoWeather(@Param('icao') icao: string, @Res() res: Response) {
@@ -18,9 +18,17 @@ export class WeatherController {
       const baseUrl = this.configService.get('WEATHER_BASE_URL');
       const MetarFileUrl = `${baseUrl}/metars.txt`;
       const TafFileUrl = `${baseUrl}/tafs.txt`;
-      const MetarFileContents = await this.weatherService.getFileContents(MetarFileUrl);
-      const TafFileContents = await this.weatherService.getFileContents(TafFileUrl);
-      const json = this.weatherService.createIcaoJson(MetarFileContents, TafFileContents, icao);
+      const MetarFileContents = await this.weatherService.getFileContents(
+        MetarFileUrl,
+      );
+      const TafFileContents = await this.weatherService.getFileContents(
+        TafFileUrl,
+      );
+      const json = this.weatherService.createIcaoJson(
+        MetarFileContents,
+        TafFileContents,
+        icao,
+      );
       res.set('Content-Type', 'application/json');
       res.send(json);
     } catch (err) {
@@ -32,7 +40,9 @@ export class WeatherController {
   @Get('metars')
   async getMetars(@Res() res: Response, @Query('search') search: string) {
     try {
-      const fileUrl = `${this.configService.get('WEATHER_BASE_URL')}/metars.txt`;
+      const fileUrl = `${this.configService.get(
+        'WEATHER_BASE_URL',
+      )}/metars.txt`;
       const fileContents = await this.weatherService.getFileContents(fileUrl);
       const json = this.weatherService.createJson(
         fileContents,
@@ -51,9 +61,7 @@ export class WeatherController {
   async getTafs(@Res() res: Response, @Query('search') search: string) {
     try {
       const fileUrl = `${this.configService.get('WEATHER_BASE_URL')}/tafs.txt`;
-      const fileContents = await this.weatherService.getFileContents(
-        fileUrl,
-      );
+      const fileContents = await this.weatherService.getFileContents(fileUrl);
       const json = this.weatherService.createJson(fileContents, search, 'taf');
       res.set('Content-Type', 'application/json');
       res.send(json);

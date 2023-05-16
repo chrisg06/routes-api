@@ -10,47 +10,47 @@ import { UsersService } from '../../users/users.service';
 
 @Injectable()
 export class VatsimStrategy extends PassportStrategy(Strategy, 'vatsim') {
-    constructor(
-        private userService: UsersService,
-        private configService: ConfigService,
-        private http: HttpService,
-    ) {
-        super({
-            authorizationURL: configService.get<string>('VATSIM_AUTH_AUTH_URL'),
-            tokenURL: configService.get<string>('VATSIM_AUTH_TOKEN_URL'),
-            clientID: configService.get<string>('VATSIM_AUTH_CLIENT_ID'),
-            clientSecret: configService.get<string>('VATSIM_AUTH_CLIENT_SECRET'),
-            callbackURL: configService.get<string>('VATSIM_AUTH_CALLBACK_URL'),
-            scope: 'full_name',
-        });
-    }
+  constructor(
+    private userService: UsersService,
+    private configService: ConfigService,
+    private http: HttpService,
+  ) {
+    super({
+      authorizationURL: configService.get<string>('VATSIM_AUTH_AUTH_URL'),
+      tokenURL: configService.get<string>('VATSIM_AUTH_TOKEN_URL'),
+      clientID: configService.get<string>('VATSIM_AUTH_CLIENT_ID'),
+      clientSecret: configService.get<string>('VATSIM_AUTH_CLIENT_SECRET'),
+      callbackURL: configService.get<string>('VATSIM_AUTH_CALLBACK_URL'),
+      scope: 'full_name',
+    });
+  }
 
-    async validate(accessToken: string, refreshToken: string): Promise<any> {
-        const userURL = this.configService.get<string>('VATSIM_AUTH_USER_INFO_URL');
-        const user$ = this.http.get(userURL, {
-            headers: {
-                Accept: 'application/json',
-                Authorization: `Bearer ${accessToken}`,
-            },
+  async validate(accessToken: string, refreshToken: string): Promise<any> {
+    const userURL = this.configService.get<string>('VATSIM_AUTH_USER_INFO_URL');
+    const user$ = this.http.get(userURL, {
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
     });
     const response = await firstValueFrom(user$);
 
     let user = null;
     try {
-        user = await this.userService.findByCid(response.data.data.cid);
+      user = await this.userService.findByCid(response.data.data.cid);
     } catch (err) {
-        if (err instanceof NotFoundException) {
-            user = await this.userService.createUser(response.data);
-        } else {
-            throw err;
-        }
+      if (err instanceof NotFoundException) {
+        user = await this.userService.createUser(response.data);
+      } else {
+        throw err;
+      }
     }
 
-    return {user, refreshToken}
-    }
+    return { user, refreshToken };
+  }
 
-    authenticate(req: Request,  options: any): any {
-        const { state } = req.query;
-        super.authenticate(req, { ...options, state });
-    }
+  authenticate(req: Request, options: any): any {
+    const { state } = req.query;
+    super.authenticate(req, { ...options, state });
+  }
 }

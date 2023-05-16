@@ -10,25 +10,25 @@ import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
-  TypeOrmModule.forRootAsync({
-    imports: [ConfigModule],
-    useFactory: async (configService: ConfigService) => ({
-      type: 'mysql',
-      host: configService.get('DB_HOST'),
-      port: configService.get('DB_PORT'),
-      username: configService.get('DB_USERNAME'),
-      password: configService.get('DB_PASSWORD'),
-      database: configService.get('DB_DATABASE'),
-      entities: [Route],
-      synchronize: true,
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        type: 'mysql',
+        host: configService.get('DB_HOST'),
+        port: configService.get('DB_PORT'),
+        username: configService.get('DB_USERNAME'),
+        password: configService.get('DB_PASSWORD'),
+        database: configService.get('DB_DATABASE'),
+        entities: [Route],
+        synchronize: true,
+      }),
+      inject: [ConfigService],
     }),
-    inject: [ConfigService],
-  }),
-  ConfigModule.forRoot({ isGlobal: true }),
-  RoutesModule,
-  WeatherModule,
-  AuthModule,
-],
+    ConfigModule.forRoot({ isGlobal: true }),
+    RoutesModule,
+    WeatherModule,
+    AuthModule,
+  ],
   controllers: [AppController],
   providers: [],
 })
