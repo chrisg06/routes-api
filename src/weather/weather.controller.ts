@@ -2,7 +2,9 @@ import { Controller, Get, Res, Query, Param } from '@nestjs/common';
 import { Response } from 'express';
 import { WeatherService } from './weather.service';
 import { ConfigService } from '@nestjs/config';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Weather')
 @Controller('weather')
 export class WeatherController {
   constructor(
