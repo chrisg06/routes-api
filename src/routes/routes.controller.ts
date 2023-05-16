@@ -12,7 +12,7 @@ import {
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { RoutesService } from './routes.service';
 import { Route } from './routes.entity';
-import { CreateRouteDto, EditRouteDto } from './dto/route.dto';
+import { CreateRouteDto, EditRouteDto, UploadRoutesDto } from './dto/route.dto';
 
 @ApiBearerAuth()
 @ApiTags('Routes')
@@ -40,7 +40,7 @@ export class RoutesController {
   }
 
   @Post('data')
-  async postData(@Body() data: any): Promise<any> {
+  async postData(@Body() data: UploadRoutesDto): Promise<any> {
     return await this.routesService.postData(data);
   }
 
