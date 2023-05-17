@@ -34,7 +34,7 @@ FROM node:18-alpine As production
 COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
 COPY --chown=node:node --from=build /usr/src/app/dist ./dist
 
-EXPOSE 3000
+EXPOSE 3200
 
 # Start the server using the production build
 CMD [ "node", "dist/main.js" ]
