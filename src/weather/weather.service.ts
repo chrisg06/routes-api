@@ -26,14 +26,24 @@ export class WeatherService {
       const lines = fileContents.split('\n');
       let objects = lines
         .map((line) => {
-          const key = type === 'metar' ? line.slice(0, 4) : line.slice(4, 8);
+          let key = null;
+          if (type === 'taf') {
+            if (line.includes('AMD') || line.includes('COR')) {
+              key = line.slice(8, 12);
+            } else {
+              key = line.slice(4, 8);
+            }
+          } else {
+            key = line.slice(0, 4);
+          }
           const value = line;
           if (key === '') return null; // exclude lines with empty keys
           return { [key]: value };
         })
         .filter((obj) => obj !== null); // filter out excluded lines
       if (search) {
-        const searchRegex = new RegExp(search, 'i');
+        let searchArr = search.split(',').join('|');
+        const searchRegex = new RegExp(searchArr, 'i');
         objects = objects.filter((obj) => {
           const value = Object.values(obj)[0];
           return searchRegex.test(value);
