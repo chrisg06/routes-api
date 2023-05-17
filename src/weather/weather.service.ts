@@ -81,7 +81,7 @@ export class WeatherService {
 
       // extract visibility data from the metar object
       let vis = null;
-      const visMatch = metarObj.match(/\b(\d{4})\b/);
+      const visMatch = metarObj.match(/\b\d+(?:\s*\d+\/\d+)?SM?\b|\b\d{4}\b/);
       if (visMatch) {
         vis = visMatch[0];
       }
@@ -130,7 +130,7 @@ export class WeatherService {
 
       //extract qnh data from the metar object
       let qnh = null;
-      const qnhMatch = metarObj.match(/Q(\d{4})/);
+      const qnhMatch = metarObj.match(/(A|Q)(\d{4})/);
       if (qnhMatch) {
         qnh = qnhMatch[0];
       }
